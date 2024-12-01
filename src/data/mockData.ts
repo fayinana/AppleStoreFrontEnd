@@ -1,0 +1,181 @@
+export const products = [
+  {
+    id: "1",
+    name: "iPhone 15 Pro",
+    price: 999,
+    description: "The most powerful iPhone ever.",
+    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+    category: "Phones",
+  },
+  {
+    id: "2",
+    name: "MacBook Pro",
+    price: 1299,
+    description: "Supercharged for pros.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    category: "Laptops",
+  },
+  {
+    id: "3",
+    name: "iPad Pro",
+    price: 799,
+    description: "Your next computer is not a computer.",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    category: "Tablets",
+  },
+
+  {
+    id: "4",
+    name: "MacBook Pro",
+    price: 1299,
+    description: "Supercharged for pros.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    category: "Laptops",
+  },
+  {
+    id: "5",
+    name: "iPad Pro",
+    price: 799,
+    description: "Your next computer is not a computer.",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    category: "Tablets",
+  },
+  {
+    id: "6",
+    name: "MacBook Pro",
+    price: 1299,
+    description: "Supercharged for pros.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    category: "Laptops",
+  },
+  {
+    id: "7",
+    name: "iPad Pro",
+    price: 799,
+    description: "Your next computer is not a computer.",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    category: "Tablets",
+  },
+  {
+    id: "8",
+    name: "MacBook Pro",
+    price: 1299,
+    description: "Supercharged for pros.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    category: "Laptops",
+  },
+  {
+    id: "9",
+    name: "iPad Pro",
+    price: 799,
+    description: "Your next computer is not a computer.",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    category: "Tablets",
+  },
+  {
+    id: "10",
+    name: "MacBook Pro",
+    price: 1299,
+    description: "Supercharged for pros.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    category: "Laptops",
+  },
+  {
+    id: "11",
+    name: "iPad Pro",
+    price: 799,
+    description: "Your next computer is not a computer.",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    category: "Tablets",
+  },
+  {
+    id: "12",
+    name: "MacBook Pro",
+    price: 1299,
+    description: "Supercharged for pros.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    category: "Laptops",
+  },
+  {
+    id: "13",
+    name: "iPad Pro",
+    price: 799,
+    description: "Your next computer is not a computer.",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    category: "Tablets",
+  },
+  {
+    id: "14",
+    name: "MacBook Pro",
+    price: 1299,
+    description: "Supercharged for pros.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    category: "Laptops",
+  },
+  {
+    id: "15",
+    name: "iPad Pro",
+    price: 799,
+    description: "Your next computer is not a computer.",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    category: "Tablets",
+  },
+  {
+    id: "16",
+    name: "MacBook Pro",
+    price: 1299,
+    description: "Supercharged for pros.",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    category: "Laptops",
+  },
+  {
+    id: "17",
+    name: "iPad Pro",
+    price: 799,
+    description: "Your next computer is not a computer.",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    category: "Tablets",
+  },
+];
+
+export const users = [
+  {
+    id: "1",
+    name: "John Doe",
+    email: "john@example.com",
+    password: "password123", // In a real app, this would be hashed
+    role: "user",
+  },
+  {
+    id: "2",
+    name: "Admin User",
+    email: "admin@example.com",
+    password: "admin123",
+    role: "admin",
+  },
+];
+
+export const reviews = [
+  {
+    id: "1",
+    productId: "1",
+    userId: "1",
+    rating: 5,
+    comment: "Amazing product! Highly recommended.",
+    createdAt: "2024-02-20",
+  },
+];
+
+export const orders = [
+  {
+    id: "1",
+    userId: "1",
+    products: [
+      { productId: "1", quantity: 1 },
+      { productId: "2", quantity: 1 },
+    ],
+    status: "completed",
+    totalAmount: 2298,
+    createdAt: "2024-02-20",
+  },
+];
