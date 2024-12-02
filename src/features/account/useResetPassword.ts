@@ -21,7 +21,7 @@ function useResetPassword() {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to Change Password. Please try again.",
+        description: error.message,
       });
     },
   });

@@ -13,7 +13,6 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (!product) {
-      // Handle case where product is not found
       console.error("Product not found");
     }
   }, [product]);
@@ -21,7 +20,7 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     const cartItem = {
       ...product,
-      quantity: 1  // Add the missing quantity property
+      quantity: 1,
     };
     addToCart(cartItem);
     toast({
@@ -33,11 +32,15 @@ const ProductDetail = () => {
   if (!product) return <div>Product not found</div>;
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold text-dribbble-heading">{product.name}</h1>
+    <div className="container mx-auto py-8 max-w-80 max-h-80 m-auto">
+      <h1 className="text-3xl font-bold text-dribbble-heading">
+        {product.name}
+      </h1>
       <img src={product.image} alt={product.name} className="my-4" />
       <p className="text-lg">{product.description}</p>
-      <p className="text-2xl font-bold text-dribbble-heading">${product.price}</p>
+      <p className="text-2xl font-bold text-dribbble-heading">
+        ${product.price}
+      </p>
       <Button onClick={handleAddToCart} className="mt-4">
         Add to Cart
       </Button>

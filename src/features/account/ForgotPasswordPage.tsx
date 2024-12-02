@@ -1,20 +1,17 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import useForgetPassword from "./useForgetPassword";
 
-export default function ForgotPasswordPage() {
-  const { toast } = useToast();
+function ForgotPasswordPage() {
+  const { isPending, forgotPassword } = useForgetPassword();
   const {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm();
-  const { isPending, forgotPassword } = useForgetPassword();
+  } = useForm<{ email: string }>();
   const onSubmit = async (data: { email: string }) => {
     forgotPassword(data);
   };
@@ -89,3 +86,5 @@ export default function ForgotPasswordPage() {
     </div>
   );
 }
+
+export default ForgotPasswordPage;

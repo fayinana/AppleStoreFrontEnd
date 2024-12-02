@@ -62,7 +62,9 @@ export function UpworkPagination({
           <PaginationPrevious
             onClick={() => onPageChange(currentPage - 1)}
             className={`${
-              currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
+              currentPage === 1
+                ? "pointer-events-none opacity-50"
+                : "cursor-pointer"
             }`}
           />
         </PaginationItem>
@@ -91,7 +93,9 @@ export function UpworkPagination({
           <PaginationNext
             onClick={() => onPageChange(currentPage + 1)}
             className={`${
-              currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"
+              currentPage === totalPages
+                ? "pointer-events-none opacity-50"
+                : "cursor-pointer"
             }`}
           />
         </PaginationItem>

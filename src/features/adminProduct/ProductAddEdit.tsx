@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 
 interface Specification {
@@ -9,18 +8,8 @@ interface Specification {
   value: string;
 }
 
-interface ProductFormData {
-  name: string;
-  category: string;
-  description: string;
-  price: number;
-  stock: number;
-  coverImage: string;
-  specifications: Specification[];
-}
-
 export default function ProductAddEdit() {
-  const [productData, setProductData] = useState<ProductFormData>({
+  const [productData, setProductData] = useState({
     name: "",
     category: "",
     description: "",
@@ -30,14 +19,10 @@ export default function ProductAddEdit() {
     specifications: [{ key: "", value: "" }],
   });
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<ProductFormData>({
-    defaultValues: productData,
-  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setProductData({ ...productData, [name]: value });
+  };
 
   const handleSpecificationChange = (
     index: number,
@@ -49,16 +34,16 @@ export default function ProductAddEdit() {
     setProductData({ ...productData, specifications: updatedSpecifications });
   };
 
-  const handleSubmitForm = (data: ProductFormData) => {
-    console.log("Product Data: ", data);
-    // You can handle form submission here
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Product Data: ", productData);
   };
 
   return (
     <div className="p-6 bg-white">
       <h3 className="text-lg font-semibold mb-4">Add Product</h3>
       <form
-        onSubmit={handleSubmit(handleSubmitForm)}
+        onSubmit={handleSubmit}
         className="grid gap-6 max-h-[80vh] overflow-y-auto"
       >
         <div className="grid gap-4">
@@ -66,89 +51,57 @@ export default function ProductAddEdit() {
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
-              {...register("name", {
-                required: "Product name is required",
-              })}
-              className="mt-1"
+              name="name"
+              value={productData.name}
+              onChange={handleChange}
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
-            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="category">Category</Label>
             <Input
               id="category"
-              {...register("category", {
-                required: "Category is required",
-              })}
-              className="mt-1"
+              name="category"
+              value={productData.category}
+              onChange={handleChange}
             />
-            {errors.category && (
-              <p className="text-red-500 text-sm">{errors.category.message}</p>
-            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="description">Description</Label>
             <Input
               id="description"
-              {...register("description", {
-                required: "Description is required",
-              })}
-              className="mt-1"
+              name="description"
+              value={productData.description}
+              onChange={handleChange}
             />
-            {errors.description && (
-              <p className="text-red-500 text-sm">
-                {errors.description.message}
-              </p>
-            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="price">Price</Label>
             <Input
               id="price"
+              name="price"
               type="number"
-              {...register("price", {
-                required: "Price is required",
-                valueAsNumber: true,
-                min: { value: 0, message: "Price must be a positive number" },
-              })}
-              className="mt-1"
+              value={productData.price}
+              onChange={handleChange}
             />
-            {errors.price && (
-              <p className="text-red-500 text-sm">{errors.price.message}</p>
-            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="stock">Stock</Label>
             <Input
               id="stock"
+              name="stock"
               type="number"
-              {...register("stock", {
-                required: "Stock is required",
-                valueAsNumber: true,
-                min: { value: 0, message: "Stock must be a positive number" },
-              })}
-              className="mt-1"
+              value={productData.stock}
+              onChange={handleChange}
             />
-            {errors.stock && (
-              <p className="text-red-500 text-sm">{errors.stock.message}</p>
-            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="coverImage">Cover Image</Label>
             <Input
               id="coverImage"
-              {...register("coverImage", {
-                required: "Cover image URL is required",
-              })}
-              className="mt-1"
+              name="coverImage"
+              value={productData.coverImage}
+              onChange={handleChange}
             />
-            {errors.coverImage && (
-              <p className="text-red-500 text-sm">
-                {errors.coverImage.message}
-              </p>
-            )}
           </div>
           {productData.specifications.map((spec, index) => (
             <div key={index} className="grid gap-2">

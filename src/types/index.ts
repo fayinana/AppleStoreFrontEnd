@@ -1,6 +1,8 @@
 export interface User {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
   email: string;
   role: "user" | "admin";
   image?: string;
@@ -28,3 +30,44 @@ export type ResetPasswordReq = {
   passwordConfirm: string;
   token?: string;
 };
+
+export type PasswordChangeData = {
+  passwordCurrent: string;
+  password: string;
+  passwordConfirm: string;
+};
+
+export interface ProductSpecification {
+  key: string;
+  value: string;
+}
+
+export interface Review {
+  _id: string;
+  review: string;
+  rating: number;
+  createdAt: string;
+  product: string;
+  user: string;
+}
+
+export interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  description?: string;
+  price: number;
+  stock: number;
+  coverImage: string;
+  images: string[];
+  specifications: ProductSpecification[];
+  ratingsAverage: number;
+  ratingsQuantity: number;
+  createdAt: string;
+  updatedAt: string;
+  reviews: Review[];
+}
+
+// export interface PopulatedReview extends Review {
+//   user: User;
+// }

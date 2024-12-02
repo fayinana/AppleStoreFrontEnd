@@ -1,5 +1,3 @@
-import { cyan } from "@mui/material/colors";
-
 describe("Forgot Password Test", () => {
   const baseUrl = "http://localhost:5371";
   beforeEach(() => {

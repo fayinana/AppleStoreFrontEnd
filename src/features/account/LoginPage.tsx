@@ -13,10 +13,9 @@ function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginReq>();
 
   function onSubmit(data: LoginReq) {
-    console.log(data);
     login(data);
   }
 
@@ -37,7 +36,7 @@ function LoginPage() {
               Sign in to your account
             </h2>
             <p className="mt-2 text-sm text-dribbble-text">
-              Or{" "}
+              Or
               <Link
                 to="/signup"
                 className="font-medium text-dribbble-primary hover:text-dribbble-secondary"
@@ -65,7 +64,7 @@ function LoginPage() {
                   })}
                   className="mt-1"
                 />
-                {errors.email && (
+                {errors?.email && (
                   <p className="text-red-500 text-sm">
                     {errors?.email?.message}
                   </p>
@@ -88,7 +87,7 @@ function LoginPage() {
                   })}
                   className="mt-1"
                 />
-                {errors.password && (
+                {errors?.password && (
                   <p className="text-red-500 text-sm">
                     {errors.password.message}
                   </p>

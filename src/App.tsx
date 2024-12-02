@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { Navbar } from "@/components/Navbar";
+import { Helmet } from "react-helmet";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import ProductsPage from "./pages/ProductsPage";
@@ -19,8 +20,11 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import ProductAddEdit from "./features/adminProduct/ProductAddEdit";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {},
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -34,21 +38,159 @@ const App = () => (
               <Navbar />
               <main className="flex-1">
                 <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/products" element={<ProductsPage />} />
-                  <Route path="/products/:id" element={<ProductDetail />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/orders" element={<Orders />} />
-                  <Route path="/orders/:id" element={<OrderDetail />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route
+                    path="/"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Home - Apple Cartopia</title>
+                        </Helmet>
+                        <Index />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/login"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Login - Apple Cartopia</title>
+                        </Helmet>
+                        <Login />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/products"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Products - Apple Cartopia</title>
+                        </Helmet>
+                        <ProductsPage />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/products/:id"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Product Detail - Apple Cartopia</title>
+                        </Helmet>
+                        <ProductDetail />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/cart"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Cart - Apple Cartopia</title>
+                        </Helmet>
+                        <Cart />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/checkout"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Checkout - Apple Cartopia</title>
+                        </Helmet>
+                        <Checkout />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/orders"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Orders - Apple Cartopia</title>
+                        </Helmet>
+                        <Orders />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/orders/:id"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Order Detail - Apple Cartopia</title>
+                        </Helmet>
+                        <OrderDetail />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Profile - Apple Cartopia</title>
+                        </Helmet>
+                        <Profile />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/admin"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Admin Dashboard - Apple Cartopia</title>
+                        </Helmet>
+                        <AdminDashboard />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/add-product"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Admin Dashboard - Apple Cartopia</title>
+                        </Helmet>
+                        <ProductAddEdit />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/signup"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Sign Up - Apple Cartopia</title>
+                        </Helmet>
+                        <Signup />
+                      </>
+                    }
+                  />
+                  <Route
+                    path="/forgot-password"
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Forgot Password - Apple Cartopia</title>
+                        </Helmet>
+                        <ForgotPassword />
+                      </>
+                    }
+                  />
                   <Route
                     path="/reset-password/:token"
-                    element={<ResetPassword />}
+                    element={
+                      <>
+                        <Helmet>
+                          <title>Reset Password - Apple Cartopia</title>
+                        </Helmet>
+                        <ResetPassword />
+                      </>
+                    }
                   />
                 </Routes>
               </main>

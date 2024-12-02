@@ -11,26 +11,24 @@ import {
 import { MobileMenu } from "./MobileMenu";
 import { SearchDialog } from "./SearchDialog";
 import { useState } from "react";
+import { useLogout } from "@/features/account/useLogin";
 
 export function Navbar() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
+  const { isLogout, logout } = useLogout();
 
   return (
     <nav className="bg-white border-b border-gray-200">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Mobile menu */}
           <MobileMenu />
-
-          {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <div className="w-5 h-5 rounded-full">
               <img src="/logo.png" alt="apple logo" />
             </div>
           </Link>
 
-          {/* Desktop navigation */}
           <div className="hidden md:flex md:items-center md:space-x-8">
             <Link
               to="/products"
@@ -90,6 +88,7 @@ export function Navbar() {
                       <Link to="/admin">Admin Panel</Link>
                     </DropdownMenuItem>
                   )}
+                  {/* TODO: */}
                   <DropdownMenuItem onClick={() => logout()}>
                     Logout
                   </DropdownMenuItem>

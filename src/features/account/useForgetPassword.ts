@@ -17,7 +17,7 @@ function useForgetPassword() {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to send reset link. Please try again.",
+        description: error.message,
       });
     },
   });
