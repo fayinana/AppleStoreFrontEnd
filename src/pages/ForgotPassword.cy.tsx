@@ -1,4 +1,3 @@
-import React from "react";
 import ForgotPassword from "./ForgotPassword";
 import "./../index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

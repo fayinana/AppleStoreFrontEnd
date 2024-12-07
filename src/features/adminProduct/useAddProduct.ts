@@ -4,13 +4,13 @@ import { addProduct as addProductApi } from "./../../services/apiProduct";
 import { useToast } from "@/hooks/use-toast";
 function useAddProduct() {
   const { toast } = useToast();
-  //   const navigate = useNavigate();
   const { isPending, mutate: addProduct } = useMutation({
     mutationFn: addProductApi,
     mutationKey: ["product"],
     onSuccess: (data) => {
+      console.log(data);
       toast({
-        title: "Password Updated",
+        title: "Product Created", 
         description: `product ${data.name} is added successfully`,
       });
     },

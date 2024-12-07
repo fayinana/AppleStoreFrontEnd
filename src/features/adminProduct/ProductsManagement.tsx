@@ -1,4 +1,3 @@
-import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -15,7 +14,7 @@ import {
   PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { Edit, MoreVertical, Trash2 } from "lucide-react";
-import ProductAddEdit from "./ProductAddEdit";
+import { Link } from "react-router-dom";
 
 const initialProducts = [
   { id: "1", name: "iPhone 15 Pro", price: 999, stock: 50 },
@@ -29,9 +28,9 @@ export default function ProductsManagement() {
       <div className="p-6">
         <h3 className="text-lg font-semibold mb-4">Product Management</h3>
         <div className="flex space-x-4 mb-4">
-          <Modal triggerText="Add Product">
-            <ProductAddEdit />
-          </Modal>
+          <Link data-test-id="add-product" to="add-product">
+            Add Product
+          </Link>
         </div>
         <Table>
           <TableHeader>

@@ -1,21 +1,11 @@
+// module import
+// third party import
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { products } from "@/data/mockData";
-import { UpworkPagination } from "@/components/UpworkPagination";
-import { useState } from "react";
-import SingleProduct from "@/features/products/SingleProduct";
+// project import
+import ProductsPage from "@/features/products/ProductsPage";
 
 export default function Index() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 9;
-  const totalPages = Math.ceil(products.length / productsPerPage);
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
   return (
     <div className="flex flex-col min-h-screen bg-dribbble-light">
       <section className="bg-dribbble-dark text-white py-20 px-4 h-[90vh] flex justify-center items-center">
@@ -43,24 +33,8 @@ export default function Index() {
           </div>
         </div>
       </section>
-
-      {/* Featured Products Grid */}
       <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-dribbble-heading text-center mb-12">
-            Featured Products
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {currentProducts.map((product) => (
-              <SingleProduct product={product} />
-            ))}
-          </div>
-          <UpworkPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+        <ProductsPage title="Feature Products" />
       </section>
     </div>
   );

@@ -8,7 +8,7 @@ export default function SingleProduct({ product }) {
       className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
     >
       <img
-        src={product.image}
+        src={product.coverImage}
         alt={product.name}
         className="w-full h-48 object-cover rounded-lg mb-4"
       />

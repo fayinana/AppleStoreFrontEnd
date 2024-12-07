@@ -1,3 +1,4 @@
+//TODO:
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import {
@@ -248,7 +249,9 @@ const AdminDashboard = () => {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="orders">Recent Orders</TabsTrigger>
-          <TabsTrigger value="products">Products</TabsTrigger>
+          <TabsTrigger value="products" data-test-id="product-tab">
+            Products
+          </TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="payments">Payments</TabsTrigger>
         </TabsList>
