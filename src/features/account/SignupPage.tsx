@@ -1,183 +1,174 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
-import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { ArrowLeft } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { SignupReq } from "@/types";
+import useSignUp from "./useSignup";
 
-interface Specification {
-  key: string;
-  value: string;
-}
-
-interface ProductFormData {
-  name: string;
-  category: string;
-  description: string;
-  price: number;
-  stock: number;
-  coverImage: string;
-  specifications: Specification[];
-}
-
-export default function ProductAddEdit() {
-  const [productData, setProductData] = useState<ProductFormData>({
-    name: "",
-    category: "",
-    description: "",
-    price: 0,
-    stock: 0,
-    coverImage: "",
-    specifications: [{ key: "", value: "" }],
-  });
-
+function SignUpPage() {
+  const { isPending, signup } = useSignUp();
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
-  } = useForm<ProductFormData>({
-    defaultValues: productData,
-  });
+    watch,
+  } = useForm<SignupReq>();
 
-  const handleSpecificationChange = (
-    index: number,
-    field: keyof Specification,
-    value: string
-  ) => {
-    const updatedSpecifications = [...productData.specifications];
-    updatedSpecifications[index][field] = value;
-    setProductData({ ...productData, specifications: updatedSpecifications });
-  };
-
-  const handleSubmitForm = (data: ProductFormData) => {
-    console.log("Product Data: ", data);
-    // You can handle form submission here
-  };
+  function onSubmit(data: SignupReq) {
+    signup(data);
+  }
 
   return (
-    <div className="p-6 bg-white">
-      <h3 className="text-lg font-semibold mb-4">Add Product</h3>
-      <form
-        onSubmit={handleSubmit(handleSubmitForm)}
-        className="grid gap-6 max-h-[80vh] overflow-y-auto"
-      >
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              {...register("name", {
-                required: "Product name is required",
-              })}
-              className="mt-1"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="category">Category</Label>
-            <Input
-              id="category"
-              {...register("category", {
-                required: "Category is required",
-              })}
-              className="mt-1"
-            />
-            {errors.category && (
-              <p className="text-red-500 text-sm">{errors.category.message}</p>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="description">Description</Label>
-            <Input
-              id="description"
-              {...register("description", {
-                required: "Description is required",
-              })}
-              className="mt-1"
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm">
-                {errors.description.message}
+    <>
+      <div className="min-h-screen bg-dribbble-light flex flex-col">
+        <Link
+          to="/"
+          className="p-4 text-dribbble-primary hover:text-dribbble-secondary transition-colors inline-flex items-center"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Home
+        </Link>
+
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+          <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold tracking-tight text-dribbble-heading">
+                Create your account
+              </h2>
+              <p className="mt-2 text-sm text-dribbble-text">
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  className="font-medium text-dribbble-primary hover:text-dribbble-secondary"
+                  data-test-id="login"
+                >
+                  Sign in here
+                </Link>
               </p>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="price">Price</Label>
-            <Input
-              id="price"
-              type="number"
-              {...register("price", {
-                required: "Price is required",
-                valueAsNumber: true,
-                min: { value: 0, message: "Price must be a positive number" },
-              })}
-              className="mt-1"
-            />
-            {errors.price && (
-              <p className="text-red-500 text-sm">{errors.price.message}</p>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="stock">Stock</Label>
-            <Input
-              id="stock"
-              type="number"
-              {...register("stock", {
-                required: "Stock is required",
-                valueAsNumber: true,
-                min: { value: 0, message: "Stock must be a positive number" },
-              })}
-              className="mt-1"
-            />
-            {errors.stock && (
-              <p className="text-red-500 text-sm">{errors.stock.message}</p>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="coverImage">Cover Image</Label>
-            <Input
-              id="coverImage"
-              {...register("coverImage", {
-                required: "Cover image URL is required",
-              })}
-              className="mt-1"
-            />
-            {errors.coverImage && (
-              <p className="text-red-500 text-sm">
-                {errors.coverImage.message}
-              </p>
-            )}
-          </div>
-          {productData.specifications.map((spec, index) => (
-            <div key={index} className="grid gap-2">
-              <Label htmlFor={`spec-${index}-key`}>
-                Specification {index + 1}
-              </Label>
-              <div className="flex space-x-4">
-                <Input
-                  id={`spec-${index}-key`}
-                  placeholder="Key"
-                  value={spec.key}
-                  onChange={(e) =>
-                    handleSpecificationChange(index, "key", e.target.value)
-                  }
-                />
-                <Input
-                  id={`spec-${index}-value`}
-                  placeholder="Value"
-                  value={spec.value}
-                  onChange={(e) =>
-                    handleSpecificationChange(index, "value", e.target.value)
-                  }
-                />
-              </div>
             </div>
-          ))}
-          <Button type="submit">Add Product</Button>
+
+            <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="firstName" className="text-dribbble-heading">
+                    First Name
+                  </Label>
+                  <Input
+                    id="firstName"
+                    {...register("firstName", {
+                      required: "First name is required",
+                    })}
+                    className="mt-1"
+                  />
+                  {errors.firstName && (
+                    <p className="text-red-500 text-sm">
+                      {errors.firstName.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="lastName" className="text-dribbble-heading">
+                    Last Name
+                  </Label>
+                  <Input
+                    id="lastName"
+                    {...register("lastName", {
+                      required: "Last name is required",
+                    })}
+                    className="mt-1"
+                  />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-sm">
+                      {errors.lastName.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="email" className="text-dribbble-heading">
+                    Email address
+                  </Label>
+                  <Input
+                    id="email"
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Please enter a valid email address",
+                      },
+                    })}
+                    className="mt-1"
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <Label htmlFor="password" className="text-dribbble-heading">
+                    Password
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters long",
+                      },
+                    })}
+                    className="mt-1"
+                  />
+                  {errors.password && (
+                    <p className="text-red-500 text-sm">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="passwordConfirm"
+                    className="text-dribbble-heading"
+                  >
+                    Confirm Password
+                  </Label>
+                  <Input
+                    id="passwordConfirm"
+                    type="password"
+                    {...register("passwordConfirm", {
+                      required: "Password confirmation is required",
+                      validate: (value) =>
+                        value === watch("password") || "Passwords don't match",
+                    })}
+                    className="mt-1"
+                  />
+                  {errors.passwordConfirm && (
+                    <p className="text-red-500 text-sm">
+                      {errors.passwordConfirm.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="w-full bg-dribbble-primary hover:bg-dribbble-secondary"
+              >
+                {isPending ? "Signing up..." : "Sign Up"}
+              </Button>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
+      </div>
+      <div />
+    </>
   );
 }
+export default SignUpPage;

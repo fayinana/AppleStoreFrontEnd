@@ -138,6 +138,7 @@ export async function updatePassword(data: PasswordChangeData) {
 }
 
 export async function updateProfile(data: User | FormData) {
+  axios.defaults.withCredentials = true;
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.patch(

@@ -52,22 +52,40 @@ export interface Review {
 }
 
 export interface Product {
-  _id: string;
+  _id?: string;
   name: string;
   category: string;
   description?: string;
   price: number;
   stock: number;
   coverImage: string;
-  images: string[];
+  images?: string[];
   specifications: ProductSpecification[];
-  ratingsAverage: number;
-  ratingsQuantity: number;
-  createdAt: string;
-  updatedAt: string;
-  reviews: Review[];
+  ratingsAverage?: number;
+  ratingsQuantity?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  reviews?: Review[];
 }
 
-// export interface PopulatedReview extends Review {
-//   user: User;
-// }
+export type QueryType = {
+  search: string;
+  limit: number;
+  page: number;
+  sort: string;
+};
+
+export interface Specification {
+  key: string;
+  value: string;
+}
+
+export interface ProductFormData {
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  stock: number;
+  coverImage: string;
+  specifications: Specification[];
+}

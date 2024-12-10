@@ -1,49 +1,25 @@
 import { useEffect, useState } from "react";
-import { Star } from "lucide-react";
+import { Minus, Plus, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import useGetProduct from "./useGetProduct";
 import LoadingSpinner from "@/components/Spinner";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useAddToCart from "../cart/useAddToCart";
 import useGetMyCart from "../cart/useGetMyCart";
+import useGetRelatedProducts from "./useGetRelatedProducts";
+import ChangeQuantity from "./ChangeQuantity";
 
-const relatedProducts = [
-  {
-    name: "AirPods Pro",
-    price: "$249.00",
-    image:
-      "https://raw.githubusercontent.com/fayinana/HomeTradeNetwork-API-/refs/heads/main/file/image/product/user-674c32b124d596621b908385-1733144967705.jpeg",
-  },
-  {
-    name: "iPhone Case",
-    price: "$49.00",
-    image:
-      "https://raw.githubusercontent.com/fayinana/HomeTradeNetwork-API-/refs/heads/main/file/image/product/user-674c32b124d596621b908385-1733144967705.jpeg",
-  },
-  {
-    name: "Apple Watch",
-    price: "$399.00",
-    image:
-      "https://raw.githubusercontent.com/fayinana/HomeTradeNetwork-API-/refs/heads/main/file/image/product/user-674c32b124d596621b908385-1733144967705.jpeg",
-  },
-  {
-    name: "MagSafe Charger",
-    price: "$39.00",
-    image:
-      "https://raw.githubusercontent.com/fayinana/HomeTradeNetwork-API-/refs/heads/main/file/image/product/user-674c32b124d596621b908385-1733144967705.jpeg",
-  },
-];
-
-export default function AppleProductDetail() {
+export default function ProductDetail() {
   const { cart } = useGetMyCart();
-
-  const productsId = cart.products.map((product) => product.product.id);
   const { id } = useParams();
-  const { isAddingToCart, addToCart } = useAddToCart();
+  const { isAddingToCart, addToCart } = useAddToCart(id);
   const [selectedImage, setSelectedImage] = useState("");
   const { isLoading, product } = useGetProduct(id as string);
   const [showAllSpecs, setShowAllSpecs] = useState(false);
+  const { isLoadingRelatedProducts, relatedProducts } = useGetRelatedProducts(
+    product?.category || "Phone"
+  );
 
   useEffect(() => {
     if (product?.coverImage) {
@@ -52,7 +28,16 @@ export default function AppleProductDetail() {
   }, [product]);
 
   if (isLoading) return <LoadingSpinner />;
+  const data = cart?.products.filter((product) => {
+    if (product.product.id === id) {
+      return product;
+    }
+  });
+  console.log("====================================");
+  console.log(data);
+  console.log("====================================");
 
+  const productsId = cart?.products?.map((product) => product.product.id) || [];
   const {
     images,
     coverImage,
@@ -65,10 +50,11 @@ export default function AppleProductDetail() {
     description,
     _id,
   } = product;
+
   function handleAddToCart() {
-    console.log("addToCart");
     addToCart({ id, price, quantity: 1, product: _id });
   }
+
   const displayedSpecs = showAllSpecs
     ? specifications
     : specifications.slice(0, 3);
@@ -76,6 +62,7 @@ export default function AppleProductDetail() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {/* Product Images */}
         <div className="space-y-4">
           <div className="relative aspect-square">
             <img
@@ -103,6 +90,7 @@ export default function AppleProductDetail() {
           </div>
         </div>
 
+        {/* Product Details */}
         <div className="space-y-6">
           <div>
             <p className="text-sm text-muted-foreground">Apple</p>
@@ -126,6 +114,7 @@ export default function AppleProductDetail() {
             </div>
           </div>
 
+          {/* Specifications and Add to Cart */}
           <div className="space-y-4">
             <div>
               <p className="text-2xl font-bold">{price}</p>
@@ -148,7 +137,6 @@ export default function AppleProductDetail() {
               </div>
             </div>
 
-            {/* Specifications */}
             <div className="mt-10">
               <h2 className="text-2xl font-semibold mb-4">Specifications</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -174,39 +162,51 @@ export default function AppleProductDetail() {
                 </Button>
               )}
             </div>
-
-            <Button
-              disabled={productsId.includes(_id)}
-              className="w-full"
-              onClick={handleAddToCart}
-            >
-              {isAddingToCart ? " Adding To Cart" : "Add To Cart"}
-            </Button>
+            {productsId.includes(_id) ? (
+              <ChangeQuantity product={data[0]} cart={cart} />
+            ) : (
+              <Button
+                disabled={productsId.includes(_id)}
+                className="w-full"
+                onClick={handleAddToCart}
+              >
+                {isAddingToCart ? "Adding To Cart" : "Add To Cart"}
+              </Button>
+            )}
           </div>
 
           <p className="text-sm text-muted-foreground">{description}</p>
         </div>
       </div>
 
+      {/* Related Products */}
       <div className="mt-12">
         <h2 className="text-xl font-bold mb-4">You might also like</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {relatedProducts.map((product, i) => (
-            <Card key={i}>
-              <CardContent className="p-2">
-                <div className="relative aspect-square mb-2">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="object-cover rounded-md w-full h-full"
-                  />
-                </div>
-                <p className="font-medium">{product.name}</p>
-                <p className="text-sm text-muted-foreground">{product.price}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {isLoadingRelatedProducts ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {relatedProducts?.data.map((product, i) => (
+              <Link key={i} to={`/products/${product._id}`}>
+                <Card>
+                  <CardContent className="p-2">
+                    <div className="relative aspect-square mb-2">
+                      <img
+                        src={product.coverImage}
+                        alt={product.name}
+                        className="object-cover rounded-md w-full h-full"
+                      />
+                    </div>
+                    <p className="font-medium">{product.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {product.price}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

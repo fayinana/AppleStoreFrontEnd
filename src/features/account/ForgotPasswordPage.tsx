@@ -1,8 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// module import
+// third party import
 import { Link } from "react-router-dom";
-import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+// project import
 import useForgetPassword from "./useForgetPassword";
 
 function ForgotPasswordPage() {
@@ -28,7 +31,6 @@ function ForgotPasswordPage() {
             password.
           </p>
         </div>
-
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-lg"
@@ -71,7 +73,6 @@ function ForgotPasswordPage() {
               "Send Reset Link"
             )}
           </Button>
-
           <div className="text-center mt-4">
             <Link
               to="/login"

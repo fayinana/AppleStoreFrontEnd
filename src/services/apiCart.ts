@@ -1,13 +1,16 @@
-import { Product, QueryType } from "@/types";
 import axios from "axios";
 axios.defaults.withCredentials = true;
-
-export async function addProduct(data: Product | FormData) {
+axios.defaults.withXSRFToken = true;
+export async function addToCart({ id, price, quantity, product }) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.post<{ data: Product }>(
-      "http://127.0.0.1:3700/api/v1/products",
-      data,
+    const res = await axios.post(
+      `http://127.0.0.1:3700/api/v1/carts/${id}`,
+      {
+        quantity,
+        price,
+        product,
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -21,29 +24,19 @@ export async function addProduct(data: Product | FormData) {
     } else if (error.message) {
       throw new Error(error.message);
     } else {
-      throw new Error("Some Thing Error");
+      throw new Error("Something went wrong");
     }
   }
 }
-
-export async function getProducts({
-  search,
-  page,
-  sort,
-  limit,
-}: QueryType): Promise<{ data: Product[]; total: number }> {
+export async function getMyCart() {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.get<{ data: Product[]; total: number }>(
-      `http://127.0.0.1:3700/api/v1/products?sort=${sort}&limit=${limit}&page=${page}&${search}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return { data: res.data.data || [], total: res.data.total };
+    const res = await axios.get(`http://127.0.0.1:3700/api/v1/carts/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.cart;
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data.message);
@@ -55,22 +48,15 @@ export async function getProducts({
   }
 }
 
-export async function getRelatedProducts(category: string): Promise<{
-  data: Product[];
-  total: number;
-}> {
+export async function deleteMyCart(id) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.get<{ data: Product[]; total: number }>(
-      `http://127.0.0.1:3700/api/v1/products/relatedProduct/${category}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return { data: res.data.data || [], total: res.data.total };
+    const res = await axios.delete(`http://127.0.0.1:3700/api/v1/carts/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.carts;
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data.message);
@@ -82,18 +68,19 @@ export async function getRelatedProducts(category: string): Promise<{
   }
 }
 
-export async function getProduct(id: string) {
+export async function updateCart({ id, cart }) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.get<{ data: Product }>(
-      `http://127.0.0.1:3700/api/v1/products/${id}`,
+    const res = await axios.patch(
+      `http://127.0.0.1:3700/api/v1/carts/${id}`,
+      cart,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    return res.data.data;
+    return res.data.carts;
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data.message);
