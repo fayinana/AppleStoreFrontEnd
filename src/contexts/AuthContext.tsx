@@ -13,9 +13,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(
     JSON.parse(localStorage.getItem("user")) || null
   );
-  console.log("================USER====================");
-  console.log(user);
-  console.log("====================================");
+
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       {children}

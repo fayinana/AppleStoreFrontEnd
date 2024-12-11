@@ -8,9 +8,8 @@ function useAddProduct() {
     mutationFn: addProductApi,
     mutationKey: ["product"],
     onSuccess: (data) => {
-      console.log(data);
       toast({
-        title: "Product Created", 
+        title: "Product Created",
         description: `product ${data.name} is added successfully`,
       });
     },

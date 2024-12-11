@@ -33,9 +33,6 @@ export default function ProductDetail() {
       return product;
     }
   });
-  console.log("====================================");
-  console.log(data);
-  console.log("====================================");
 
   const productsId = cart?.products?.map((product) => product.product.id) || [];
   const {
@@ -187,7 +184,7 @@ export default function ProductDetail() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {relatedProducts?.data.map((product, i) => (
-              <Link key={i} to={`/products/${product._id}`}>
+              <Link key={product._id} to={`/products/${product._id}`}>
                 <Card>
                   <CardContent className="p-2">
                     <div className="relative aspect-square mb-2">

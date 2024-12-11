@@ -28,16 +28,18 @@ function useLogin() {
 }
 
 export function useLogout() {
+  const { setUser } = useAuth();
   const navigate = useNavigate();
   const { isPending: isLogout, mutate: logout } = useMutation({
     mutationFn: logoutApi,
     mutationKey: ["user"],
     onSuccess: () => {
       toast.success("You've successfully logged out.");
-      navigate("/login");
+      setUser(null);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.setItem("isAuthenticated", "false");
+      navigate("/login");
     },
     onError: (error) => {
       toast.error(error.message);

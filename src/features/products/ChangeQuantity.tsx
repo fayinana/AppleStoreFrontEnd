@@ -3,9 +3,6 @@ import { Minus, Plus } from "lucide-react";
 import useUpdateCart from "../cart/useUpdateCart";
 
 export default function ChangeQuantity({ product, cart }) {
-  console.log("==================PRODUCTS==================");
-  console.log(product);
-  console.log("====================================");
   const { isUpdating, updateCart } = useUpdateCart();
 
   function handleQuantityChange(productId, newQuantity) {

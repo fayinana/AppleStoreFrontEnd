@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Trash2, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -8,6 +8,7 @@ import useGetMyCart from "@/features/cart/useGetMyCart";
 import { useDeleteMyCart } from "./useDeleteCart";
 import useUpdateCart from "./useUpdateCart";
 import ChangeQuantity from "../products/ChangeQuantity";
+import PayButton from "../checkout/PayButton";
 
 export default function Cart() {
   const { isLoading, cart } = useGetMyCart();
@@ -59,7 +60,7 @@ export default function Cart() {
           {cart.products.map((item) => (
             <Card key={item.id} className="overflow-hidden">
               <CardContent className="p-4 sm:p-6 flex flex-col sm:flex-row gap-4">
-                <div className="relative w-full sm:w-16 sm:h-16 flex-shrink-0">
+                <div className="relative w-full max-w-[100px] sm:w-16 sm:h-16 flex-shrink-0">
                   <img
                     src={item?.product?.coverImage}
                     alt={item.product.name}
@@ -117,9 +118,8 @@ export default function Cart() {
                 <span>Total</span>
                 <span>${cart.totalPrice.toFixed(2)}</span>
               </div>
-              <Button className="w-full mt-6" size="lg" asChild>
-                <Link to="/checkout">Proceed to Checkout</Link>
-              </Button>
+
+              <PayButton cartItems={cart.products} />
             </CardContent>
           </Card>
         </div>

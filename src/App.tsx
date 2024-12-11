@@ -1,5 +1,4 @@
 import { Toaster } from "react-hot-toast";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -20,6 +19,8 @@ import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ProductAddEdit from "./features/adminProduct/ProductAddEdit";
+import Dashboard from "./features/dashboard/Dashboard";
+import CheckoutSuccess from "./features/checkout/CheckoutSuccess";
 
 const queryClient = new QueryClient({
   defaultOptions: {},
@@ -101,6 +102,17 @@ const App = () => (
                   }
                 />
                 <Route
+                  path="/checkoutSuccess/:id"
+                  element={
+                    <>
+                      <Helmet>
+                        <title>Checkout - Apple Cartopia</title>
+                      </Helmet>
+                      <CheckoutSuccess />
+                    </>
+                  }
+                />
+                <Route
                   path="/orders"
                   element={
                     <>
@@ -130,6 +142,17 @@ const App = () => (
                         <title>Profile - Apple Cartopia</title>
                       </Helmet>
                       <Profile />
+                    </>
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <>
+                      <Helmet>
+                        <title>User Dashboard - Apple Cartopia</title>
+                      </Helmet>
+                      <Dashboard />
                     </>
                   }
                 />
