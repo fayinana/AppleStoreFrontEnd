@@ -8,32 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const recentOrders = [
-  {
-    id: "1",
-    customer: "John Doe",
-    product: "iPhone 15 Pro",
-    amount: 999,
-    status: "completed",
-  },
-  {
-    id: "2",
-    customer: "Jane Smith",
-    product: "MacBook Pro",
-    amount: 1299,
-    status: "pending",
-  },
-  {
-    id: "3",
-    customer: "Bob Johnson",
-    product: "iPad Pro",
-    amount: 799,
-    status: "processing",
-  },
-];
+import useGetAllOrders from "./useGetAllOrders";
+import LoadingSpinner from "@/components/Spinner";
 
 const RecentOrders = () => {
+  const { isLoading, orders } = useGetAllOrders();
+
+  if (isLoading) return <LoadingSpinner />;
+
+  const recentOrders = orders.slice(0, 5);
+
   return (
     <Card>
       <Table>
@@ -47,23 +31,27 @@ const RecentOrders = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {recentOrders.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell className="font-medium">#{order.id}</TableCell>
-              <TableCell>{order.customer}</TableCell>
-              <TableCell>{order.product}</TableCell>
-              <TableCell>${order.amount}</TableCell>
+          {recentOrders.map((order, index) => (
+            <TableRow key={index}>
+              <TableCell className="font-medium">#{index + 1}</TableCell>
+              <TableCell>{order.user.fullName}</TableCell>
+              <TableCell>
+                {order.products.map((prod, index) => (
+                  <span key={index}>{prod.product.name}</span>
+                ))}
+              </TableCell>
+              <TableCell>${order.totalPrice}</TableCell>
               <TableCell>
                 <Badge
                   variant={
-                    order.status === "completed"
+                    order.paymentStatus === "completed"
                       ? "default"
-                      : order.status === "pending"
+                      : order.paymentStatus === "pending"
                       ? "secondary"
                       : "outline"
                   }
                 >
-                  {order.status}
+                  {order.paymentStatus}
                 </Badge>
               </TableCell>
             </TableRow>

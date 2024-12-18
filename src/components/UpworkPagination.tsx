@@ -54,31 +54,40 @@ export function UpworkPagination({
     return pages;
   };
 
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      onPageChange(page);
+    }
+  };
+
   return (
     <Pagination className="my-8">
       <PaginationContent>
+        {/* Previous Button */}
         <PaginationItem>
           <PaginationPrevious
-            onClick={() => onPageChange(currentPage - 1)}
+            onClick={() => handlePageChange(currentPage - 1)}
             className={`${
               currentPage === 1
                 ? "pointer-events-none opacity-50"
                 : "cursor-pointer"
             }`}
+            aria-disabled={currentPage === 1}
           />
         </PaginationItem>
 
+        {/* Page Numbers */}
         {getPageNumbers().map((page, index) => (
           <PaginationItem key={index}>
             {page === "ellipsis" ? (
               <PaginationEllipsis />
             ) : (
               <PaginationLink
-                onClick={() => onPageChange(page as number)}
+                onClick={() => handlePageChange(page as number)}
                 isActive={currentPage === page}
                 className={`${
                   currentPage === page
-                    ? "bg-dribbble-primary text-white hover:bg-dribbble-secondary"
+                    ? "bg-dribbble-primary text-white hover:bg-dribbble-secondary p-1"
                     : "hover:bg-gray-100"
                 } cursor-pointer`}
               >
@@ -88,14 +97,16 @@ export function UpworkPagination({
           </PaginationItem>
         ))}
 
+        {/* Next Button */}
         <PaginationItem>
           <PaginationNext
-            onClick={() => onPageChange(currentPage + 1)}
+            onClick={() => handlePageChange(currentPage + 1)}
             className={`${
               currentPage === totalPages
                 ? "pointer-events-none opacity-50"
                 : "cursor-pointer"
             }`}
+            aria-disabled={currentPage === totalPages}
           />
         </PaginationItem>
       </PaginationContent>

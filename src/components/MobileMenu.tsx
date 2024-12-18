@@ -9,9 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLogout } from "@/features/account/useLogin";
 
 export function MobileMenu() {
   const { user } = useAuth();
+  const { isLogout, logout } = useLogout();
 
   return (
     <Sheet>

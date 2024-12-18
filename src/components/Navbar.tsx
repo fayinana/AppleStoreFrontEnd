@@ -1,21 +1,19 @@
 import { Link } from "react-router-dom";
+import { ShoppingCart, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Search, User } from "lucide-react";
+import { MobileMenu } from "./MobileMenu";
+import LoadingSpinner from "./Spinner";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MobileMenu } from "./MobileMenu";
-import { SearchDialog } from "./SearchDialog";
-import { useState } from "react";
 import { useLogout } from "@/features/account/useLogin";
 
 export function Navbar() {
   const { user } = useAuth();
-  const [searchOpen, setSearchOpen] = useState(false);
   const { isLogout, logout } = useLogout();
 
   return (
@@ -44,17 +42,7 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* Search, Cart, and User */}
           <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-dribbble-heading"
-              onClick={() => setSearchOpen(true)}
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-
             <Link to="/cart">
               <Button
                 variant="ghost"
@@ -88,9 +76,8 @@ export function Navbar() {
                       <Link to="/admin">Admin Panel</Link>
                     </DropdownMenuItem>
                   )}
-                  {/* TODO: */}
                   <DropdownMenuItem onClick={() => logout()}>
-                    Logout
+                    {!isLogout ? "Logout" : <LoadingSpinner size={10} />}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -104,7 +91,6 @@ export function Navbar() {
           </div>
         </div>
       </div>
-      <SearchDialog open={searchOpen} setOpen={setSearchOpen} />
     </nav>
   );
 }

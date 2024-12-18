@@ -43,9 +43,21 @@ export default function CheckoutSuccessPage() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium text-dribbble-heading">
-                  Total amount
+                  Product Price
                 </span>
                 <span className="text-dribbble-text">${totalPrice}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-dribbble-heading">
+                  Shipping Price
+                </span>
+                <span className="text-dribbble-text">${5}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-dribbble-heading">
+                  Total amount
+                </span>
+                <span className="text-dribbble-text">${totalPrice + 5}</span>
               </div>
             </div>
 
@@ -53,28 +65,28 @@ export default function CheckoutSuccessPage() {
               <div className="flex items-center">
                 <Package className="h-5 w-5 text-dribbble-primary mr-2" />
                 <span className="text-sm text-dribbble-text">
-                  Your order is being processed
+                  Your order is being {status}
                 </span>
               </div>
               <div className="flex items-center">
                 <Truck className="h-5 w-5 text-dribbble-primary mr-2" />
                 <span className="text-sm text-dribbble-text">
-                  Estimated delivery: 3-5 business days
+                  Estimated delivery: 5-7 business days
                 </span>
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="flex items-center justify-between">
               <Link to={`/order/${id}`}>
-                <Button
-                  className="w-full bg-dribbble-primary hover:bg-dribbble-secondary
-              text-white"
-                >
+                <Button className="bg-white hover:bg-gray-200 text-dribbble-primary">
                   View Order Details
                 </Button>
               </Link>
               <Link to="/products">
-                <Button className="m-auto text-center bg-[#d1d1d1] text-dribbble-primary">
+                <Button
+                  className="w-full bg-dribbble-primary hover:bg-dribbble-secondary
+              text-white"
+                >
                   Continue Shopping
                 </Button>
               </Link>

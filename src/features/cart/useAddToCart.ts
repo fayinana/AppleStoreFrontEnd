@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToCart as addToCartApi } from "@/services/apiCart";
 import toast from "react-hot-toast";
 
-function useAddToCart(id) {
+function useAddToCart(id: string) {
   const queryClient = useQueryClient();
   const { isPending: isAddingToCart, mutate: addToCart } = useMutation({
     mutationFn: addToCartApi,

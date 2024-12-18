@@ -1,80 +1,136 @@
 import { Link } from "react-router-dom";
-import { ShoppingBag, Package, CreditCard, Apple, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+  ShoppingBag,
+  Package,
+  CreditCard,
+  Apple,
+  Heart,
+  ArrowLeft,
+  ArrowRight,
+} from "lucide-react";
+import moment from "moment";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-
-// Mock data for demonstration purposes
-const recentOrders = [
-  { id: 1, product: "iPhone 13 Pro", status: "Delivered", date: "2023-06-15" },
-  { id: 2, product: "MacBook Air M2", status: "Shipped", date: "2023-06-10" },
-  { id: 3, product: "AirPods Pro", status: "Processing", date: "2023-06-05" },
-];
-
-const recommendedProducts = [
-  { id: 1, name: "iPad Air", price: 599 },
-  { id: 2, name: "Apple Watch Series 8", price: 399 },
-  { id: 3, name: "Mac Mini M2", price: 599 },
-];
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from "recharts";
+import useGetMyOrders from "../order/useGetMyOrders";
+import LoadingSpinner from "@/components/Spinner";
+import useGetMyCart from "../cart/useGetMyCart";
+import { FaCartPlus } from "react-icons/fa";
 
 export default function Dashboard() {
+  const { myOrders, isLoadingMyOrder } = useGetMyOrders();
+  const { isLoading: isLoadingCart, cart } = useGetMyCart();
+
+  const payment = { pending: 0, succeeded: 0, failed: 0, canceled: 0 };
+  const shipping = {
+    not_shipped: 0,
+    shipped: 0,
+    delivered: 0,
+    returned: 0,
+    canceled: 0,
+  };
+  let totalPrice = 0;
+
+  if (isLoadingMyOrder || isLoadingCart) return <LoadingSpinner />;
+
+  const recentOrders = myOrders.slice(0, 4);
+  myOrders.forEach((order) => {
+    payment[order.paymentStatus]++;
+    shipping[order.shippingStatus]++;
+    totalPrice += order.totalPrice;
+  });
+  const paymentChartData = [
+    { name: "Pending", value: payment.pending },
+    { name: "Succeeded", value: payment.succeeded },
+    { name: "Failed", value: payment.failed },
+    { name: "Canceled", value: payment.canceled },
+  ];
+
+  const shippingChartData = [
+    { name: "Not Shipped", value: shipping.not_shipped },
+    { name: "Delivered", value: shipping.delivered },
+    { name: "Shipped", value: shipping.shipped },
+    { name: "Returned", value: shipping.returned },
+    { name: "Canceled", value: shipping.canceled },
+  ];
+
+  const COLORS = ["#FFCE56", "#4BC0C0", "#FF6384", "#36A2EB", "#1abb48"];
+
   return (
     <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8">
+      <h1 className="text-3xl font-bold mb-8 text-center">
         Welcome to Your Apple Dashboard
       </h1>
 
+      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Spent</CardTitle>
-            <ShoppingBag className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$4,231.89</div>
-            <p className="text-xs text-muted-foreground">
-              +20.1% from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Orders</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground">
-              1 shipped, 1 processing
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Reward Points</CardTitle>
-            <Apple className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">1,203</div>
-            <p className="text-xs text-muted-foreground">
-              Redeem for discounts
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Wishlist Items
-            </CardTitle>
-            <Heart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">7</div>
-            <p className="text-xs text-muted-foreground">3 items on sale</p>
-          </CardContent>
-        </Card>
+        {[
+          {
+            title: "Total Spent",
+            value: `$${totalPrice.toFixed(2)}`,
+            icon: (
+              <ShoppingBag className="h-4 w-4 text-muted-foreground text-pink-600" />
+            ),
+            note: "+20.1% from last month",
+          },
+          {
+            title: "Active Orders",
+            value: myOrders?.length,
+            icon: (
+              <Package className="h-4 w-4 text-muted-foreground text-pink-600" />
+            ),
+            note: `${shipping.shipped} shipped, ${shipping.not_shipped} not-shipped`,
+            link: "/order",
+          },
+          {
+            title: "Reward Points",
+            value: `${(totalPrice / 115).toFixed(2)}`,
+            icon: (
+              <Apple className="h-4 w-4 text-muted-foreground text-pink-600" />
+            ),
+            note: "Redeem for discounts",
+          },
+          {
+            title: "Cart Items",
+            value: `${cart?.products?.length || 0}`,
+            icon: (
+              <FaCartPlus className="h-4 w-4 text-muted-foreground text-pink-600" />
+            ),
+            note: "3 items on sale",
+            link: "/cart",
+          },
+        ].map((card, index) => (
+          <Card key={index}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {card.title}
+              </CardTitle>
+              {card.icon}
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{card.value}</div>
+              <div className="flex items-center justify-between ">
+                <p className="text-xs text-muted-foreground">{card.note}</p>
+                <span className="text-pink-600 bg-pink-100 p-1 rounded-full">
+                  {card.link ? (
+                    <Link to={card?.link}>
+                      <ArrowRight />
+                    </Link>
+                  ) : null}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
+      {/* Recent Orders */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card className="col-span-1">
           <CardHeader>
@@ -84,25 +140,58 @@ export default function Dashboard() {
             <div className="space-y-4">
               {recentOrders.map((order) => (
                 <div
-                  key={order.id}
-                  className="flex items-center justify-between"
+                  key={order._id}
+                  className="flex items-center justify-between bg-gray-100 p-4 rounded-md"
                 >
                   <div>
-                    <p className="font-medium">{order.product}</p>
+                    {order.products.map((product) => (
+                      <p key={product._id} className="font-medium">
+                        {product._id || "Apple Product"}
+                      </p>
+                    ))}
                     <p className="text-sm text-muted-foreground">
-                      {order.date}
+                      {moment(order.createdAt).format("MMMM DD, YYYY")}
                     </p>
                   </div>
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
-                      order.status === "Delivered"
+                      order.shippingStatus === "delivered"
                         ? "bg-green-100 text-green-800"
-                        : order.status === "Shipped"
+                        : order.shippingStatus === "shipped"
                         ? "bg-blue-100 text-blue-800"
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
-                    {order.status}
+                    {order.shippingStatus}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>Recent Transactions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentOrders.map((order) => (
+                <div
+                  key={order._id}
+                  className="flex items-center justify-between bg-gray-100 p-4 rounded-md"
+                >
+                  <div>
+                    {order.products.map((product) => (
+                      <p key={product._id} className="font-medium">
+                        {product.product.name || "Apple Product"}
+                      </p>
+                    ))}
+                    <p className="text-sm text-muted-foreground">
+                      {moment(order.createdAt).format("MMMM DD, YYYY")}
+                    </p>
+                  </div>
+                  <span className="px-2 py-1 rounded-full text-md text-black font-bold">
+                    {order.totalPrice}
                   </span>
                 </div>
               ))}
@@ -110,55 +199,47 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle>Checkout Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between mb-2">
-                  <span className="text-sm font-medium">Order Processing</span>
-                  <span className="text-sm font-medium">75%</span>
-                </div>
-                <Progress value={75} className="w-full" />
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span>Estimated Delivery:</span>
-                <span className="font-medium">June 22, 2023</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span>Tracking Number:</span>
-                <span className="font-medium">APPL123456789</span>
-              </div>
-              <Button className="w-full" asChild>
-                <Link to="/track-order">Track Your Order</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Payment and Shipping Status */}
+        {[
+          {
+            title: "Payment Status",
+            data: paymentChartData,
+          },
+          {
+            title: "Shipping Status",
+            data: shippingChartData,
+          },
+        ].map((chart, index) => (
+          <Card className="col-span-1" key={index}>
+            <CardHeader>
+              <CardTitle>{chart.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={chart.data}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                  >
+                    {chart.data.map((_, i) => (
+                      <Cell
+                        key={`cell-${i}`}
+                        fill={COLORS[i % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        ))}
       </div>
-
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>Recommended for You</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {recommendedProducts.map((product) => (
-              <Card key={product.id}>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">{product.name}</h3>
-                  <p className="text-sm mb-4">${product.price}</p>
-                  <Button variant="outline" className="w-full" asChild>
-                    <Link to={`/product/${product.id}`}>View Details</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

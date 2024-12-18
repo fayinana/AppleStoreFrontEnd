@@ -9,6 +9,7 @@ import { useDeleteMyCart } from "./useDeleteCart";
 import useUpdateCart from "./useUpdateCart";
 import ChangeQuantity from "../products/ChangeQuantity";
 import PayButton from "../checkout/PayButton";
+import BackButton from "@/components/BackButton";
 
 export default function Cart() {
   const { isLoading, cart } = useGetMyCart();
@@ -17,9 +18,9 @@ export default function Cart() {
 
   if (isLoading) return <LoadingSpinner />;
   function handleClearAllCart() {
-    deleteCart(cart._id);
+    deleteCart(cart.id);
   }
-  function handleRemoveItem(productId) {
+  function handleRemoveItem(productId: string) {
     const updatedProduct = cart.products.filter((product) => {
       if (product.product.id !== productId) {
         return product;
@@ -33,6 +34,7 @@ export default function Cart() {
   if (!cart || cart.products.length === 0) {
     return (
       <div className="container mx-auto py-16 px-4">
+        <BackButton />
         <Card className="max-w-md mx-auto text-center">
           <CardContent className="pt-6 pb-8 px-8">
             <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
@@ -55,7 +57,6 @@ export default function Cart() {
         Your Shopping Cart
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Cart Items */}
         <div className="lg:col-span-2 space-y-6">
           {cart.products.map((item) => (
             <Card key={item.id} className="overflow-hidden">
@@ -89,12 +90,15 @@ export default function Cart() {
               </CardContent>
             </Card>
           ))}
-          <button onClick={handleClearAllCart}>
-            {isDeletingCart ? "clearing" : "clear cart"}
-          </button>
+          <Button
+            onClick={handleClearAllCart}
+            className="w-20 mx-auto mt-6 bg-slate-200 text-stone-900 hover:bg-slate-200 hover:text-red-500"
+            size="lg"
+          >
+            {isDeletingCart ? "Clearing..." : "Clear Cart"}
+          </Button>
         </div>
 
-        {/* Order Summary */}
         <div className="lg:col-span-1">
           <Card>
             <CardContent className="p-4 sm:p-6">

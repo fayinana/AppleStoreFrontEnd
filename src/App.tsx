@@ -1,26 +1,33 @@
+import React, { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { CartProvider } from "@/contexts/CartContext";
 import { Navbar } from "@/components/Navbar";
 import { Helmet } from "react-helmet";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Orders from "./pages/Orders";
-import OrderDetail from "./pages/OrderDetail";
-import Profile from "./pages/Profile";
-import AdminDashboard from "./pages/AdminDashboard";
-import Signup from "./pages/Signup";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import ProductAddEdit from "./features/adminProduct/ProductAddEdit";
-import Dashboard from "./features/dashboard/Dashboard";
-import CheckoutSuccess from "./features/checkout/CheckoutSuccess";
+import LoadingSpinner from "./components/Spinner";
+
+// Lazy load components
+const Index = React.lazy(() => import("./pages/Index"));
+const Login = React.lazy(() => import("./pages/Login"));
+const Products = React.lazy(() => import("./pages/Products"));
+const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
+const Cart = React.lazy(() => import("./pages/Cart"));
+const Checkout = React.lazy(() => import("./pages/Checkout"));
+const Orders = React.lazy(() => import("./pages/Orders"));
+const OrderDetail = React.lazy(() => import("./pages/OrderDetail"));
+const Profile = React.lazy(() => import("./pages/Profile"));
+const AdminDashboard = React.lazy(() => import("./pages/AdminDashboard"));
+const Signup = React.lazy(() => import("./pages/Signup"));
+const ForgotPassword = React.lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
+const ProductAddEdit = React.lazy(
+  () => import("./features/adminProduct/ProductAddEdit")
+);
+const Dashboard = React.lazy(() => import("./features/dashboard/Dashboard"));
+const CheckoutSuccess = React.lazy(
+  () => import("./features/checkout/CheckoutSuccess")
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {},
@@ -30,10 +37,10 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <AuthProvider>
-        <CartProvider>
-          <div className="min-h-screen flex flex-col bg-dribbble-light">
-            <Navbar />
-            <main className="flex-1">
+        <div className="min-h-screen flex flex-col bg-dribbble-light">
+          <Navbar />
+          <main className="flex-1">
+            <Suspense fallback={<LoadingSpinner />}>
               <Routes>
                 <Route
                   path="/"
@@ -113,7 +120,7 @@ const App = () => (
                   }
                 />
                 <Route
-                  path="/orders"
+                  path="/order"
                   element={
                     <>
                       <Helmet>
@@ -124,7 +131,7 @@ const App = () => (
                   }
                 />
                 <Route
-                  path="/orders/:id"
+                  path="/order/:id"
                   element={
                     <>
                       <Helmet>
@@ -172,9 +179,18 @@ const App = () => (
                   element={
                     <>
                       <Helmet>
-                        <title>
-                          Admin Dashboard - Add New Product | Edit Product
-                        </title>
+                        <title>Admin Dashboard - Add New Product</title>
+                      </Helmet>
+                      <ProductAddEdit />
+                    </>
+                  }
+                />
+                <Route
+                  path="admin/edit-product/:id"
+                  element={
+                    <>
+                      <Helmet>
+                        <title>Admin Dashboard - Edit Product</title>
                       </Helmet>
                       <ProductAddEdit />
                     </>
@@ -214,9 +230,9 @@ const App = () => (
                   }
                 />
               </Routes>
-            </main>
-          </div>
-        </CartProvider>
+            </Suspense>
+          </main>
+        </div>
       </AuthProvider>
     </BrowserRouter>
     <Toaster

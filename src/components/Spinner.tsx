@@ -2,7 +2,7 @@ import React from "react";
 
 interface LoadingSpinnerProps {
   color?: string;
-  size?: number; // Diameter of the spinner
+  size?: number;
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
@@ -16,8 +16,8 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         style={{
           width: size,
           height: size,
-          border: `${size / 10}px solid ${color}80`, // Semi-transparent border
-          borderTop: `${size / 10}px solid ${color}`, // Solid border for animation
+          border: `${size / 10}px solid ${color}80`,
+          borderTop: `${size / 10}px solid ${color}`,
           borderRadius: "50%",
           animation: "spin 1s linear infinite",
         }}

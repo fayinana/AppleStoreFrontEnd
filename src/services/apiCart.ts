@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Cart } from "@/types/index";
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 export async function addToCart({ id, price, quantity, product }) {
@@ -28,14 +29,17 @@ export async function addToCart({ id, price, quantity, product }) {
     }
   }
 }
-export async function getMyCart() {
+export async function getMyCart<Cart>() {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.get(`http://127.0.0.1:3700/api/v1/carts/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axios.get<{ status: string; cart: Cart }>(
+      `http://127.0.0.1:3700/api/v1/carts/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return res.data.cart;
   } catch (error) {
     if (error.response) {
@@ -68,7 +72,7 @@ export async function deleteMyCart(id) {
   }
 }
 
-export async function updateCart({ id, cart }) {
+export async function updateCart({ id, cart }: { id: string; cart: Cart }) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.patch(
@@ -80,7 +84,7 @@ export async function updateCart({ id, cart }) {
         },
       }
     );
-    return res.data.carts;
+    return res.data.cart;
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data.message);

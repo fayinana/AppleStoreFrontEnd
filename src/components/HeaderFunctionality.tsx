@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from "react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -10,76 +12,57 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface ProductFiltersProps {
-  onFilterChange: (filters: {
-    search: string;
-    minPrice: string;
-    maxPrice: string;
-    sort: string;
-  }) => void;
-}
+export default function FilterHeader({
+  onSortChange,
+  onSearch,
+  onLimitChange,
+  sortArray,
+  limitArray,
+}) {
+  const [searchText, setSearchText] = useState("");
 
-export default function ProductFilters({
-  onFilterChange,
-}: ProductFiltersProps) {
-  const [search, setSearch] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [sort, setSort] = useState("-price");
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    onFilterChange({ search, minPrice, maxPrice, sort });
+    onSearch(searchText);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 mb-8">
-      <div>
-        <Label htmlFor="search">Search</Label>
+    <div className="space-y-4 bg-white p-6 rounded-lg shadow-sm">
+      <form onSubmit={handleSearch} className="flex items-center space-x-2">
         <Input
-          id="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          type="text"
           placeholder="Search products..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="flex-1"
         />
-      </div>
-      <div className="flex space-x-4">
-        <div className="flex-1">
-          <Label htmlFor="minPrice">Min Price</Label>
-          <Input
-            id="minPrice"
-            type="number"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            placeholder="Min price"
-          />
-        </div>
-        <div className="flex-1">
-          <Label htmlFor="maxPrice">Max Price</Label>
-          <Input
-            id="maxPrice"
-            type="number"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            placeholder="Max price"
-          />
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="sort">Sort By</Label>
-        <Select value={sort} onValueChange={setSort}>
-          <SelectTrigger id="sort">
+        <Button type="submit" variant="ghost">
+          <Search className="h-5 w-5" />
+          <span className="sr-only">Search</span>
+        </Button>
+      </form>
+      <div className="flex flex-wrap gap-4">
+        <Select onValueChange={onSortChange}>
+          <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="-price">Price: High to Low</SelectItem>
-            <SelectItem value="price">Price: Low to High</SelectItem>
-            <SelectItem value="-createdAt">Newest</SelectItem>
-            <SelectItem value="createdAt">Oldest</SelectItem>
+            {sortArray.map((sort: { value: string; text: string }) => (
+              <SelectItem value={sort.value}>{sort.text}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select onValueChange={(value) => onLimitChange(Number(value))}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Items per page" />
+          </SelectTrigger>
+          <SelectContent>
+            {limitArray.map((sort: { value: string; text: string }) => (
+              <SelectItem value={sort.value}>{sort.text}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
-      <Button type="submit">Apply Filters</Button>
-    </form>
+    </div>
   );
 }

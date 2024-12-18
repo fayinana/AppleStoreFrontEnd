@@ -1,11 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import useUpdateCart from "../cart/useUpdateCart";
+import { Cart, CartProduct } from "@/types";
 
-export default function ChangeQuantity({ product, cart }) {
+export default function ChangeQuantity({
+  product,
+  cart,
+}: {
+  product: CartProduct;
+  cart: Cart;
+}) {
   const { isUpdating, updateCart } = useUpdateCart();
 
-  function handleQuantityChange(productId, newQuantity) {
+  function handleQuantityChange(productId: string, newQuantity: number) {
     const updatedProduct = cart.products.map((product) => {
       if (product.product.id === productId) {
         product.quantity = newQuantity;

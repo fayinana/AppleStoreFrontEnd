@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Minus, Plus, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import useGetProduct from "./useGetProduct";
@@ -9,8 +9,15 @@ import useAddToCart from "../cart/useAddToCart";
 import useGetMyCart from "../cart/useGetMyCart";
 import useGetRelatedProducts from "./useGetRelatedProducts";
 import ChangeQuantity from "./ChangeQuantity";
+import { useForm } from "react-hook-form";
+import { ReviewFormData } from "@/types";
+import useAddReview from "../review/useAddReview";
+import ReviewsSection from "../review/ReviewsSection";
+import { useAuth } from "@/contexts/AuthContext";
+import BackButton from "@/components/BackButton";
 
 export default function ProductDetail() {
+  const { user } = useAuth();
   const { cart } = useGetMyCart();
   const { id } = useParams();
   const { isAddingToCart, addToCart } = useAddToCart(id);
@@ -20,7 +27,6 @@ export default function ProductDetail() {
   const { isLoadingRelatedProducts, relatedProducts } = useGetRelatedProducts(
     product?.category || "Phone"
   );
-
   useEffect(() => {
     if (product?.coverImage) {
       setSelectedImage(product.coverImage);
@@ -28,11 +34,8 @@ export default function ProductDetail() {
   }, [product]);
 
   if (isLoading) return <LoadingSpinner />;
-  const data = cart?.products.filter((product) => {
-    if (product.product.id === id) {
-      return product;
-    }
-  });
+
+  const data = cart?.products.filter((product) => product.product.id === id);
 
   const productsId = cart?.products?.map((product) => product.product.id) || [];
   const {
@@ -58,6 +61,7 @@ export default function ProductDetail() {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <BackButton />
       <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {/* Product Images */}
         <div className="space-y-4">
@@ -87,7 +91,6 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* Product Details */}
         <div className="space-y-6">
           <div>
             <p className="text-sm text-muted-foreground">Apple</p>
@@ -98,7 +101,7 @@ export default function ProductDetail() {
                   <Star
                     key={i}
                     className={`w-4 h-4 ${
-                      i < Math.round(ratingsAverage)
+                      i < ratingsAverage
                         ? "fill-primary text-primary"
                         : "fill-muted text-muted-foreground"
                     }`}
@@ -111,27 +114,9 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* Specifications and Add to Cart */}
           <div className="space-y-4">
             <div>
               <p className="text-2xl font-bold">{price}</p>
-            </div>
-
-            <div className="space-y-2">
-              <p className="font-medium">Available Colors</p>
-              <div className="flex gap-2">
-                {[
-                  "bg-purple-600",
-                  "bg-yellow-400",
-                  "bg-black",
-                  "bg-white border",
-                ].map((color) => (
-                  <div
-                    key={color}
-                    className={`w-6 h-6 rounded-full ${color} cursor-pointer`}
-                  />
-                ))}
-              </div>
             </div>
 
             <div className="mt-10">
@@ -159,6 +144,7 @@ export default function ProductDetail() {
                 </Button>
               )}
             </div>
+
             {productsId.includes(_id) ? (
               <ChangeQuantity product={data[0]} cart={cart} />
             ) : (
@@ -173,10 +159,10 @@ export default function ProductDetail() {
           </div>
 
           <p className="text-sm text-muted-foreground">{description}</p>
+          <ReviewsSection productId={id} currentUser={user} reviews={reviews} />
         </div>
       </div>
 
-      {/* Related Products */}
       <div className="mt-12">
         <h2 className="text-xl font-bold mb-4">You might also like</h2>
         {isLoadingRelatedProducts ? (
