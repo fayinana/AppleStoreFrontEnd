@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,11 +16,14 @@ import {
 } from "@/components/ui/table";
 import { Edit, UserMinus, MoreVertical } from "lucide-react";
 import useGetUsers from "./useGetUsers";
+import useEditUser from "./useEditUser";
+
 import LoadingSpinner from "@/components/Spinner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { UpworkPagination } from "@/components/UpworkPagination";
 import FilterHeader from "@/components/HeaderFunctionality";
+import useDeleteUser from "./usedeleteuser";
 
 const limitArray = [
   { value: 5, text: "5 item" },
@@ -39,6 +42,14 @@ const sortArray = [
 const UserManagement = () => {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { deleteUser, isDeletingUser } = useDeleteUser();
+  const { updateUser, isUpdatingUser } = useEditUser();
+  function handleDeleteUser(userId: string) {
+    deleteUser(userId);
+  }
+  function handleUpdateUser({ userId, role }) {
+    updateUser({ userId, role });
+  }
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 5;
@@ -52,7 +63,7 @@ const UserManagement = () => {
     sort,
   });
 
-  const [filteredUser, setFilteredUser] = useState(users);
+  // const [filteredUser, setFilteredUser] = useState(users);
 
   const totalPages = Math.ceil(total / limit) || 1;
 
@@ -107,7 +118,7 @@ const UserManagement = () => {
       }
     });
 
-    setFilteredUser(newUser);
+    // setFilteredUser(newUser);
   };
 
   const handleLimitChange = (newLimit: number) => {
@@ -155,7 +166,7 @@ const UserManagement = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredUser.map((user) => (
+            {users.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="font-medium">{user.fullName}</TableCell>
                 <TableCell>{user.email}</TableCell>
@@ -174,8 +185,10 @@ const UserManagement = () => {
                           variant="ghost"
                           className="w-full justify-start"
                           onClick={() => {
-                            // Implement user edit functionality
-                            console.log("Edit user:", user.id);
+                            handleUpdateUser({
+                              userId: user.id,
+                              role: user.role === "admin" ? "user" : "admin",
+                            });
                           }}
                         >
                           <Edit className="mr-2 h-4 w-4" />
@@ -184,7 +197,7 @@ const UserManagement = () => {
                         <Button
                           variant="ghost"
                           className="w-full justify-start"
-                          // onClick={() => handleDeleteUser(user.id)}
+                          onClick={() => handleDeleteUser(user.id)}
                         >
                           <UserMinus className="mr-2 h-4 w-4" />
                           Delete

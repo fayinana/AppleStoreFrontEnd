@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { UpworkPagination } from "@/components/UpworkPagination";
@@ -39,7 +39,6 @@ export default function ProductsPage({ title }: { title: string }) {
     sort,
   });
 
-  const [filteredProducts, setFilteredProduct] = useState(products);
   const totalPages = Math.ceil(total / limit) || 1;
 
   useEffect(() => {
@@ -52,7 +51,6 @@ export default function ProductsPage({ title }: { title: string }) {
       });
     }
   }, [currentPage, totalPages, limit, sort, search, setSearchParams]);
-
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["products"] });
   }, [currentPage, limit, search, sort, queryClient]);
@@ -75,12 +73,6 @@ export default function ProductsPage({ title }: { title: string }) {
       sort,
       search: newSearch,
     });
-    const newProducts = products.filter((user) => {
-      if (user.name.toLowerCase().includes(newSearch.toLowerCase())) {
-        return user;
-      }
-    });
-    setFilteredProduct(newProducts);
   };
 
   const handleLimitChange = (newLimit: number) => {
@@ -102,7 +94,6 @@ export default function ProductsPage({ title }: { title: string }) {
   };
 
   if (isLoading) return <LoadingSpinner />;
-
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold text-dribbble-heading mb-8">{title}</h1>
@@ -116,7 +107,7 @@ export default function ProductsPage({ title }: { title: string }) {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-        {filteredProducts.map((product) => (
+        {products.map((product) => (
           <SingleProduct key={product._id} product={product} />
         ))}
       </div>

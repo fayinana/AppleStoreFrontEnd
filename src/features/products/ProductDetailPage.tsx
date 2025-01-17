@@ -4,19 +4,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import useGetProduct from "./useGetProduct";
 import LoadingSpinner from "@/components/Spinner";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import useAddToCart from "../cart/useAddToCart";
 import useGetMyCart from "../cart/useGetMyCart";
 import useGetRelatedProducts from "./useGetRelatedProducts";
 import ChangeQuantity from "./ChangeQuantity";
-import { useForm } from "react-hook-form";
-import { ReviewFormData } from "@/types";
-import useAddReview from "../review/useAddReview";
 import ReviewsSection from "../review/ReviewsSection";
 import { useAuth } from "@/contexts/AuthContext";
 import BackButton from "@/components/BackButton";
+import { FaShare, FaShareAlt } from "react-icons/fa";
+import {
+  FacebookShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  FacebookIcon,
+  TelegramIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "react-share";
 
 export default function ProductDetail() {
+  const location = useLocation();
   const { user } = useAuth();
   const { cart } = useGetMyCart();
   const { id } = useParams();
@@ -59,6 +68,8 @@ export default function ProductDetail() {
     ? specifications
     : specifications.slice(0, 3);
 
+  const productUrl = window.location.href;
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <BackButton />
@@ -92,8 +103,11 @@ export default function ProductDetail() {
         </div>
 
         <div className="space-y-6">
-          <div>
+          <div className="relative">
             <p className="text-sm text-muted-foreground">Apple</p>
+            <span className="absolute top-4 right-0">
+              <FaShareAlt className="text-[25px] cursor-pointer" />
+            </span>
             <h1 className="text-3xl font-bold">{name}</h1>
             <div className="flex items-center gap-4 mt-2">
               <div className="flex items-center">
@@ -145,7 +159,11 @@ export default function ProductDetail() {
               )}
             </div>
 
-            {productsId.includes(_id) ? (
+            {!user ? (
+              <Link to="/login" state={{ from: location }} replace>
+                <Button className="w-full mt-10">Login First</Button>
+              </Link>
+            ) : productsId.includes(_id) ? (
               <ChangeQuantity product={data[0]} cart={cart} />
             ) : (
               <Button
@@ -160,6 +178,20 @@ export default function ProductDetail() {
 
           <p className="text-sm text-muted-foreground">{description}</p>
           <ReviewsSection productId={id} currentUser={user} reviews={reviews} />
+          <div className="social-share-buttons mt-4">
+            <FacebookShareButton url={productUrl}>
+              <FacebookIcon size={32} round />
+            </FacebookShareButton>
+            <TelegramShareButton url={productUrl}>
+              <TelegramIcon size={32} round />
+            </TelegramShareButton>
+            <TwitterShareButton url={productUrl}>
+              <TwitterIcon size={32} round />
+            </TwitterShareButton>
+            <WhatsappShareButton url={productUrl}>
+              <WhatsappIcon size={32} round />
+            </WhatsappShareButton>
+          </div>
         </div>
       </div>
 

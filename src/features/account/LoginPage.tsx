@@ -39,7 +39,7 @@ function LoginPage() {
               Sign in to your account
             </h2>
             <p className="mt-2 text-sm text-dribbble-text">
-              Or
+              Or {"  "}
               <Link
                 to="/signup"
                 className="font-medium text-dribbble-primary hover:text-dribbble-secondary"

@@ -52,7 +52,7 @@ export default function ProductsManagement() {
     page: currentPage,
     sort,
   });
-  const [filteredProducts, setFilteredProduct] = useState(products);
+  // const [filteredProducts, setFilteredProduct] = useState(products);
   const totalPages = Math.ceil(total / limit) || 1;
 
   useEffect(() => {
@@ -110,12 +110,11 @@ export default function ProductsManagement() {
       search: newSearch,
       tab: activeTab,
     });
-    const newProducts = products.filter((user) => {
+    const newUsers = products.filter((user) => {
       if (user.name.toLowerCase().includes(newSearch.toLowerCase())) {
         return user;
       }
     });
-    setFilteredProduct(newProducts);
   };
 
   const handleLimitChange = (newLimit: number) => {
@@ -163,7 +162,7 @@ export default function ProductsManagement() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredProducts.map((product) => (
+            {products.map((product) => (
               <TableRow key={product._id}>
                 <TableCell>
                   <img

@@ -6,6 +6,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
 import { Helmet } from "react-helmet";
 import LoadingSpinner from "./components/Spinner";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 // Lazy load components
 const Index = React.lazy(() => import("./pages/Index"));
@@ -86,114 +87,121 @@ const App = () => (
                     </>
                   }
                 />
+
                 <Route
                   path="/cart"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin", "user"]}>
                       <Helmet>
                         <title>Cart - Apple Cartopia</title>
                       </Helmet>
                       <Cart />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
                 <Route
                   path="/checkout"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin", "user"]}>
                       <Helmet>
                         <title>Checkout - Apple Cartopia</title>
                       </Helmet>
                       <Checkout />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
                 <Route
                   path="/checkoutSuccess/:id"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin", "user"]}>
                       <Helmet>
                         <title>Checkout - Apple Cartopia</title>
                       </Helmet>
                       <CheckoutSuccess />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
                 <Route
                   path="/order"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin", "user"]}>
                       <Helmet>
                         <title>Orders - Apple Cartopia</title>
                       </Helmet>
                       <Orders />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
+
                 <Route
                   path="/order/:id"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin", "user"]}>
                       <Helmet>
                         <title>Order Detail - Apple Cartopia</title>
                       </Helmet>
                       <OrderDetail />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
+
                 <Route
                   path="/profile"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin", "user"]}>
                       <Helmet>
                         <title>Profile - Apple Cartopia</title>
                       </Helmet>
                       <Profile />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
+
                 <Route
                   path="/dashboard"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin", "user"]}>
                       <Helmet>
                         <title>User Dashboard - Apple Cartopia</title>
                       </Helmet>
                       <Dashboard />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
+
                 <Route
                   path="/admin"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin"]}>
                       <Helmet>
                         <title>Admin Dashboard - Apple Cartopia</title>
                       </Helmet>
                       <AdminDashboard />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
+
                 <Route
                   path="admin/add-product"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin"]}>
                       <Helmet>
                         <title>Admin Dashboard - Add New Product</title>
                       </Helmet>
                       <ProductAddEdit />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
+
                 <Route
                   path="admin/edit-product/:id"
                   element={
-                    <>
+                    <ProtectedRoute allowedRoles={["admin"]}>
                       <Helmet>
                         <title>Admin Dashboard - Edit Product</title>
                       </Helmet>
                       <ProductAddEdit />
-                    </>
+                    </ProtectedRoute>
                   }
                 />
                 <Route
@@ -204,6 +212,17 @@ const App = () => (
                         <title>Sign Up - Apple Cartopia</title>
                       </Helmet>
                       <Signup />
+                    </>
+                  }
+                />
+                <Route
+                  path="/unauthorized"
+                  element={
+                    <>
+                      <Helmet>
+                        <title>Unauthorized - Apple Cartopia</title>
+                      </Helmet>
+                      <h3>unauthorized</h3>
                     </>
                   }
                 />

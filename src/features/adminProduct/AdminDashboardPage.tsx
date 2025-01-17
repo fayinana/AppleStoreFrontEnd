@@ -26,6 +26,7 @@ import LoadingSpinner from "@/components/Spinner";
 import useGetRevenueData from "./useGetRevenueData";
 import useGetMonthlyStat from "./useGetMonthlyStat";
 import { Link, useSearchParams } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -65,7 +66,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState(
     searchParams.get("tab") || "overview"
   );
-  const limit = Number(searchParams.get("limit")) || 9;
+  const limit = Number(searchParams.get("limit")) || 5;
   const sort = searchParams.get("sort") || "-price";
   const search = searchParams.get("search") || "";
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -118,9 +119,9 @@ const AdminDashboard = () => {
         <Link
           data-test-id="add-product"
           to="add-product"
-          className="bg-dribbble-primary hover:bg-dribbble-secondary px-4 py-2 rounded-md text-white fixed top-20 right-8 z-50"
+          className="bg-dribbble-primary hover:bg-dribbble-secondary flex items-center gap-2 px-4 py-2 rounded-md text-white fixed top-20 right-8 z-50"
         >
-          Add
+          <FaPlus /> Add New Product
         </Link>
       </div>
       {/* Stats Grid */}

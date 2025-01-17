@@ -1,5 +1,4 @@
 import { getAllOrders } from "@/services/apiOrder";
-import { Order } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 function useGetMyOrders() {

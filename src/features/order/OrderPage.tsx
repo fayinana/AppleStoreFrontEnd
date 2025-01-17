@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import useGetMyOrders from "./useGetMyOrders";
 import LoadingSpinner from "@/components/Spinner";
 import BackButton from "@/components/BackButton";
+import moment from "moment";
 
 export default function OrderPage() {
   const { isLoadingMyOrder, myOrders } = useGetMyOrders();
@@ -38,8 +39,10 @@ export default function OrderPage() {
             <TableBody>
               {myOrders.map((order) => (
                 <TableRow key={order._id}>
-                  <TableCell className="font-medium">#{order._id}</TableCell>
-                  <TableCell>{order.createdAt}</TableCell>
+                  <TableCell className="font-medium">{order._id}</TableCell>
+                  <TableCell>
+                    {moment(order.createdAt).format("MMMM DD, YYYY")}
+                  </TableCell>
                   <TableCell>${order.totalPrice}</TableCell>
                   <TableCell>
                     <span
