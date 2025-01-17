@@ -1,4 +1,4 @@
-import CheckoutPage from "@/features/checkout/CheckoutPage";
+import CheckoutPage from "@/features/checkout/CheckoutSuccess";
 
 export default function Checkout() {
   return <CheckoutPage />;
