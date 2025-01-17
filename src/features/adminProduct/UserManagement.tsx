@@ -23,7 +23,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { UpworkPagination } from "@/components/UpworkPagination";
 import FilterHeader from "@/components/HeaderFunctionality";
-import useDeleteUser from "./usedeleteuser";
+import useDeleteUser from "./useDeleteUser";
 
 const limitArray = [
   { value: 5, text: "5 item" },
