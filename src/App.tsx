@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { Helmet } from "react-helmet";
 import LoadingSpinner from "./components/Spinner";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import UnauthorizedPage from "./pages/Unauthorized";
 
 // Lazy load components
 const Index = React.lazy(() => import("./pages/Index"));
@@ -222,7 +223,7 @@ const App = () => (
                       <Helmet>
                         <title>Unauthorized - Apple Cartopia</title>
                       </Helmet>
-                      <h3>unauthorized</h3>
+                      <UnauthorizedPage />
                     </>
                   }
                 />

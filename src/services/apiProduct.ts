@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { Product, QueryType } from "@/types";
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -6,7 +7,7 @@ export async function addProduct(data: Product | FormData) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.post<{ data: Product }>(
-      "http://127.0.0.1:3700/api/v1/products",
+      `${BASE_URL}/products`,
       data,
       {
         headers: {
@@ -34,7 +35,7 @@ export async function getProducts({
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.get<{ data: Product[]; total: number }>(
-      `http://127.0.0.1:3700/api/v1/products?sort=${sort}&limit=${limit}&page=${page}`,
+      `${BASE_URL}/products?sort=${sort}&limit=${limit}&page=${page}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -61,7 +62,7 @@ export async function getRelatedProducts(category: string): Promise<{
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.get<{ data: Product[]; total: number }>(
-      `http://127.0.0.1:3700/api/v1/products/relatedProduct/${category}`,
+      `${BASE_URL}/products/relatedProduct/${category}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -85,7 +86,7 @@ export async function getProduct(id: string) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.get<{ data: Product }>(
-      `http://127.0.0.1:3700/api/v1/products/${id}`,
+      `${BASE_URL}/products/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -114,7 +115,7 @@ export async function editProduct({
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.patch<{ data: Product }>(
-      `http://127.0.0.1:3700/api/v1/products/${id}`,
+      `${BASE_URL}/products/${id}`,
       data,
       {
         headers: {

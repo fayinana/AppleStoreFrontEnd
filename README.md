@@ -1,6 +1,5 @@
 #
 
-`AddToCart btn`
-`protect routs`
 `search functionality`
-`create unauthorized page`
+`notfound`
+`pagination for orders page`

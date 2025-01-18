@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import axios from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ export default function PayButton({ cartItems }) {
       const token = JSON.parse(localStorage.getItem("token"));
 
       const res = await axios.post(
-        `http://127.0.0.1:3700/api/v1/create-checkout-session`,
+        `${BASE_URL}/create-checkout-session`,
         {
           cartItems,
           userId: user.id,

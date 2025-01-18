@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import axios from "axios";
 import { Cart } from "@/types/index";
 axios.defaults.withCredentials = true;
@@ -6,7 +7,7 @@ export async function addToCart({ id, price, quantity, product }) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.post(
-      `http://127.0.0.1:3700/api/v1/carts/${id}`,
+      `${BASE_URL}/carts/${id}`,
       {
         quantity,
         price,
@@ -33,7 +34,7 @@ export async function getMyCart<Cart>() {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.get<{ status: string; cart: Cart }>(
-      `http://127.0.0.1:3700/api/v1/carts/`,
+      `${BASE_URL}/carts/`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -55,7 +56,7 @@ export async function getMyCart<Cart>() {
 export async function deleteMyCart(id) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.delete(`http://127.0.0.1:3700/api/v1/carts/${id}`, {
+    const res = await axios.delete(`${BASE_URL}/carts/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -75,15 +76,11 @@ export async function deleteMyCart(id) {
 export async function updateCart({ id, cart }: { id: string; cart: Cart }) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.patch(
-      `http://127.0.0.1:3700/api/v1/carts/${id}`,
-      cart,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const res = await axios.patch(`${BASE_URL}/carts/${id}`, cart, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data.cart;
   } catch (error) {
     if (error.response) {

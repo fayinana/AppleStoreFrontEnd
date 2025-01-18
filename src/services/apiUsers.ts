@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { User } from "@/types";
 import axios from "axios";
 
@@ -12,7 +13,7 @@ export async function getUsers({
       throw new Error("Token not found in local storage");
     }
     const res = await axios.get(
-      `http://127.0.0.1:3700/api/v1/users?sort=${sort}&limit=${limit}&page=${page}`,
+      `${BASE_URL}/users?sort=${sort}&limit=${limit}&page=${page}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,14 +33,11 @@ export async function getUsers({
 export async function deleteUser(userId: string) {
   try {
     const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.delete(
-      `http://127.0.0.1:3700/api/v1/users/${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const res = await axios.delete(`${BASE_URL}/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -59,7 +57,7 @@ export async function updateUser({
   try {
     const token = JSON.parse(localStorage.getItem("token"));
     const res = await axios.patch(
-      `http://127.0.0.1:3700/api/v1/users/${userId}`,
+      `${BASE_URL}/users/${userId}`,
       { role },
       {
         headers: {
@@ -67,9 +65,7 @@ export async function updateUser({
         },
       }
     );
-    console.log("===============updated data=====================");
-    console.log(res.data);
-    console.log("====================================");
+
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

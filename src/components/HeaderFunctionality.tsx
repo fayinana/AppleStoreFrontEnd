@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,8 +25,11 @@ export default function FilterHeader({
   };
 
   return (
-    <div className="space-y-4 bg-white p-6 rounded-lg shadow-sm">
-      <form onSubmit={handleSearch} className="flex items-center space-x-2">
+    <div className="gap-2 rounded-lg shadow-sm flex items-center px-1 py-6 justify-evenly flex-wrap">
+      <form
+        onSubmit={handleSearch}
+        className="flex items-center  w-full md:w-1/2 self-end gap-2"
+      >
         <Input
           type="text"
           placeholder="Search products..."
@@ -41,24 +42,28 @@ export default function FilterHeader({
           <span className="sr-only">Search</span>
         </Button>
       </form>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 items-center justify-start">
         <Select onValueChange={onSortChange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[100px] md:w-[180px]">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
             {sortArray.map((sort: { value: string; text: string }) => (
-              <SelectItem value={sort.value}>{sort.text}</SelectItem>
+              <SelectItem key={sort.value} value={sort.value}>
+                {sort.text}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select onValueChange={(value) => onLimitChange(Number(value))}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[100px] md:w-[180px]">
             <SelectValue placeholder="Items per page" />
           </SelectTrigger>
           <SelectContent>
-            {limitArray.map((sort: { value: string; text: string }) => (
-              <SelectItem value={sort.value}>{sort.text}</SelectItem>
+            {limitArray.map((limit: { value: string; text: string }) => (
+              <SelectItem key={limit.value} value={limit.value}>
+                {limit.text}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>

@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import { ReviewFormData } from "@/types";
 import axios from "axios";
 
@@ -13,15 +14,11 @@ export async function addReview({
     if (!token) {
       throw new Error("Token not found in local storage");
     }
-    const res = await axios.post(
-      `http://127.0.0.1:3700/api/v1/products/${id}/reviews`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const res = await axios.post(`${BASE_URL}/products/${id}/reviews`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return res.data.data;
   } catch (error) {
@@ -47,7 +44,7 @@ export async function updateReview({
       throw new Error("Token not found in local storage");
     }
     const res = await axios.patch(
-      `http://127.0.0.1:3700/api/v1/products/${productId}/reviews/${id}`,
+      `${BASE_URL}/products/${productId}/reviews/${id}`,
       data,
       {
         headers: {
