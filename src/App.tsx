@@ -8,6 +8,7 @@ import { Helmet } from "react-helmet";
 import LoadingSpinner from "./components/Spinner";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import UnauthorizedPage from "./pages/Unauthorized";
+import NotFound from "./pages/NotFound";
 
 // Lazy load components
 const Index = React.lazy(() => import("./pages/Index"));
@@ -246,6 +247,17 @@ const App = () => (
                         <title>Reset Password - Apple Cartopia</title>
                       </Helmet>
                       <ResetPassword />
+                    </>
+                  }
+                />
+                <Route
+                  path="*"
+                  element={
+                    <>
+                      <Helmet>
+                        <title>404 Not Found - Apple Cartopia</title>
+                      </Helmet>
+                      <NotFound />
                     </>
                   }
                 />
